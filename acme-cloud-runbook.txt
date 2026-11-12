@@ -1,0 +1,18 @@
+# Acme Corporation — Production Cloud Run & Platform Runbook
+
+* **Client & Environment ID:** `ACME-404` (Production)
+* **SLA Tier:** Platinum (4-hour resolution target)
+* **Service Architecture & Infrastructure Specifications:**
+  * **Frontend Service Name:** `acme-frontend-prod` (Google Cloud Run, `us-central1`)
+  * **Backend Worker Cluster:** `acme-worker-gke` (Google Kubernetes Engine Autopilot)
+  * **Primary Database:** Cloud SQL for PostgreSQL (`acme-db-prod`, `max_connections = 100`; 80 connections available to app containers)
+  * **Container Connection Pool:** Each `acme-frontend-prod` container opens a pool of `10` connections (`POOL_SIZE=10`).
+  * **Networking:** Serverless VPC Access Connector (`acme-vpc-connector`).
+* **Strict Operational Governance, FinOps & Scaling Rules:**
+  * **FinOps Idle-Instance Policy (`min-instances: 0`):** Acme operates under a strict FinOps policy that prohibits always-warm idle instances (`min-instances > 0`) on `acme-frontend-prod` without written budget approval from Lead Architect **Sarah Connor (`sarah@acme-corp.com`)**.
+  * **Database Connection Ceiling (`max-instances: 8`):** Because each container consumes 10 DB connections (`8 instances * 10 = 80`), **NEVER increase `max-instances` or `min-instances` above `8`**, or you will exhaust `acme-db-prod` connection slots and trigger a production outage.
+  * **CI/CD GitOps Enforcement:** Manual changes via the Cloud Console or `gcloud run services update` in production are **strictly forbidden** and reverted by drift detection. All updates MUST be deployed via the GitHub Actions workflow (`.github/workflows/deploy.yml`).
+  * **IAM Least-Privilege Policy:** Granting primitive IAM roles (`roles/owner`, `roles/editor`) or broad `*Admin` roles is blocked by Organization Policy. Always assign the narrowest predefined GCP IAM role required.
+* **Legacy Troubleshooting Notes (Last Updated: 2023-04-15):**
+  * **High Cold-Start Latency (LEGACY 2023 NOTE):** During traffic spikes, `acme-frontend-prod` experiences 5-second cold starts due to CPU throttling during container initialization. *Legacy 2023 workaround:* Pass `gcloud beta run services update --no-cpu-throttling` to give containers extra CPU during boot without paying for 24/7 idle CPU. *(Note: Verify current GA flag behavior in official docs).*
+  * **Database Connection Timeouts:** If Cloud SQL timeouts occur, verify that `acme-vpc-connector` is in a `READY` state and check packet drop metrics before restarting the database.

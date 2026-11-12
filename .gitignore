@@ -1,0 +1,31 @@
+# Environment variables & secrets (NEVER commit real API keys or project IDs)
+.env
+*.env
+!.env.example
+support_assistant/.env
+
+# Google Cloud & Service Account credentials
+*credentials*.json
+*service-account*.json
+*.pem
+*.key
+.gcloud/
+
+# Python virtual environments & caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# ADK local session logs & OS artifacts
+.adk/
+agents_log/
+*.log
+.DS_Store
+.idea/
+.vscode/
