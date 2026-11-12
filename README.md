@@ -66,7 +66,7 @@ dual-engine-adk-assistant/
 * A Google Cloud Project with billing enabled
 * Python 3.10+ and `gcloud` CLI authenticated
 * A **Gemini API Key** from [Google AI Studio](https://aistudio.google.com/)
-* A **Developer Knowledge API Key** created in **GCP Console > APIs & Services > Credentials** (restricted to *Developer Knowledge API*)
+* A [**Developer Knowledge API Key**](https://developers.google.com/knowledge/mcp#choose-auth) created in **GCP Console > APIs & Services > Credentials** (restricted to *Developer Knowledge API*)
 
 ### Step 1: Enable GCP APIs & Upload the Sample Runbook
 
