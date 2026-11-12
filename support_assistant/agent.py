@@ -125,7 +125,7 @@ def enforce_dejargoned_dkp_query(
 # Define the Google ADK Root Agent
 root_agent = LlmAgent(
     name="support_triage_agent",
-    model=os.environ.get("GEMINI_MODEL", "gemini-2.5-flash"),
+    model=os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite"),
     description=(
         "Dual-engine Cloud Support Assistant that routes between private runbooks "
         "(Agent Search) and official GCP documentation (Developer Knowledge API)."
